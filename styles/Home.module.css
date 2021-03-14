@@ -147,7 +147,6 @@
   outline: none;
   font-weight: bold;
   font-size: 20px;
-
 }
 
 .board {
@@ -174,5 +173,8 @@
 .piece {
     height: 12vh;
     width: 12vw;
+}
 
+.selected {
+  background-color: yellow;
 }
