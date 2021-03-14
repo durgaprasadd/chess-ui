@@ -119,4 +119,33 @@
     width: 100%;
     flex-direction: column;
   }
+  .login {
+    position: absolute !important;
+    left: 0 !important;
+    top: 10vh !important;
+  }
+}
+
+.login {
+  height: 32vh;
+  width: 50vw;
+  position: absolute;
+  top: 34vh;
+  left: 25vw;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  border: 2px solid black;
+  border-radius: 2vh;
+  padding: 10vh 10vw;
+  font-weight: bold;
+}
+
+.text{
+  border:none;
+  border-bottom: 2px solid black;
+  outline: none;
+  font-weight: bold;
+  font-size: 20px;
+
 }
