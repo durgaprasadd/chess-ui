@@ -230,7 +230,7 @@ class Board extends Component{
     }
 
     renderRow(rowIndex, col, colIndex){
-        let className = styles.grid
+        let className = styles.box
         if((rowIndex + colIndex)%2 === 0){
             className += ' ' + styles.black
         }
