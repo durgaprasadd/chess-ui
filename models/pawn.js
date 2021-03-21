@@ -6,7 +6,7 @@ class Pawn extends Piece {
 
     constructor(row, col, type) {
         super(PAWN, row, col, type)
-        this.direction = (this.type === BLACK ) ? 1 : -1
+        this.direction = (this.type === BLACK) ? 1 : -1
     }
 
     isValidMove(board, row, col, piece) {
