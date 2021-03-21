@@ -1,55 +1,74 @@
 import React, {Component} from "react";
 import styles from '../styles/Home.module.css'
-import pieces from '../data/initialPositions.js'
 import EmptyPiece from "../models/EmptyPiece";
-import {BLACK, WHITE} from "../models/constants";
+import initialiseGame from "../data/initialPositions";
 
 class Board extends Component {
     constructor(props) {
         super(props);
+        let game = initialiseGame()
+        console.log(game)
         this.state = {
-            board: this.initialBoard(),
-            selected: new EmptyPiece(),
-            turn: "white"
+            game: game,
+            board: this.initialBoard(game),
+            selected: new EmptyPiece()
         }
     }
 
-    initialBoard() {
+    initialBoard(game) {
         const board = new Array(8).fill(1).map(i => new Array(8).fill(1).map((j, index) => {
             return new EmptyPiece()
         }))
-        pieces.forEach(piece => {
-                board[piece.row][piece.col] = piece.piece
+        game.players.forEach(player => player.pieces.forEach(piece => {
+                board[piece.row][piece.col] = piece
             }
-        )
+        ))
         return board
     }
 
-    changeTurn(turn) {
-        if (turn === BLACK) {
-            return WHITE
-        }
-        return BLACK
-    }
-
     handleSelection(rowIndex, colIndex, e) {
-        const {board, selected, turn} = this.state
-        let piece = board[rowIndex][colIndex]
+        const {board, selected, game} = this.state
+        const piece = board[rowIndex][colIndex]
+        const nextPlayer = game.nextPlayer()
+        const currentPlayer = game.currentPlayer()
         if (!selected.isEmpty) {
-            if (!selected.isValidMove(board, rowIndex, colIndex, piece)) {
+            if (!selected.isValidMove(board, rowIndex, colIndex, piece) || !this.canMove(selected, piece, currentPlayer, nextPlayer, rowIndex, colIndex, board)) {
                 selected.selected = false
                 this.setState({selected: new EmptyPiece()})
             } else {
+                if (!piece.isEmpty) nextPlayer.removePiece(piece)
                 board[selected.row][selected.col] = new EmptyPiece()
                 selected.move(rowIndex, colIndex)
                 selected.selected = false
                 board[rowIndex][colIndex] = selected
-                this.setState({selected: new EmptyPiece(), turn: this.changeTurn(turn)})
+                console.log(nextPlayer.isCheck(currentPlayer, board))
+                game.changeTurn()
+                this.setState({selected: new EmptyPiece()})
             }
-        } else if (!piece.isEmpty && piece.type === turn) {
+        } else if (!piece.isEmpty && piece.type === currentPlayer.type) {
             piece.selected = true
             this.setState({selected: piece})
         }
+    }
+
+    canMove(selected, piece, currentPlayer, nextPlayer, rowIndex, colIndex, board) {
+        const isEmpty = piece.isEmpty
+        const row = selected.row
+        const col = selected.col
+        if (!isEmpty) {
+            nextPlayer.removePiece(piece)
+        }
+        board[rowIndex][colIndex] = selected
+        board[row][col] = new EmptyPiece()
+        selected.move(rowIndex, colIndex)
+        let result = currentPlayer.isCheck(nextPlayer, board)
+        if (!isEmpty) {
+            nextPlayer.addPiece(piece)
+        }
+        selected.move(row, col)
+        board[row][col] = selected
+        board[rowIndex][colIndex] = piece
+        return !result
     }
 
     renderRow(rowIndex, piece, colIndex) {
