@@ -10,6 +10,19 @@ class King extends Piece {
     isValidMove(board, row, col, piece) {
         return this.checkBasicValidity(piece) && Math.abs(this.row - row) < 2 && Math.abs(this.col - col) < 2
     }
+
+    possibleMoves(board) {
+        return [-1, 0, 1]
+            .flatMap(r => [-1, 0, 1].map(c => [r, c]))
+            .map(([r, c]) => [this.row + r, this.col + c])
+            .log()
+            .filter(([r, c]) => this.isValidPosition(r, c))
+            .filter(([r, c]) => this.isValidMove(board, r, c, board[r][c]))
+    }
 }
 
+Array.prototype.log = function (logger = console.log) {
+    logger(this)
+    return this
+}
 export default King

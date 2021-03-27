@@ -13,6 +13,10 @@ class Queen extends Piece {
             (Rook.isValidRookMove(board, this.row, this.col, row, col) ||
                 Bishop.isValidBishopMove(board, this.row, this.col, row, col))
     }
+
+    possibleMoves(board) {
+        return [[1, 0], [-1, 0], [0, 1], [0, -1],[1, 1], [1, -1], [-1, 1], [-1, -1]].flatMap(([r, c]) => this.possibleMovesInQ(board, r, c))
+    }
 }
 
 export default Queen

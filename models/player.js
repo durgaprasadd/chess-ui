@@ -19,6 +19,10 @@ class Player {
     isCheck(player, board) {
         return player.pieces.some(piece => piece.isValidMove(board, this.king.row, this.king.col, this.king))
     }
+
+    isCheckMate(player, board) {
+        return this.pieces
+    }
 }
 
 export default Player

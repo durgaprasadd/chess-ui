@@ -7,7 +7,6 @@ class Board extends Component {
     constructor(props) {
         super(props);
         let game = initialiseGame()
-        console.log(game)
         this.state = {
             game: game,
             board: this.initialBoard(game),
@@ -28,7 +27,6 @@ class Board extends Component {
 
     handleSelection(rowIndex, colIndex, e) {
         const {board, selected, game} = this.state
-        console.log(game)
         const piece = board[rowIndex][colIndex]
         const nextPlayer = game.nextPlayer()
         const currentPlayer = game.currentPlayer()
@@ -42,7 +40,6 @@ class Board extends Component {
                 selected.move(rowIndex, colIndex)
                 selected.selected = false
                 board[rowIndex][colIndex] = selected
-                console.log(nextPlayer.isCheck(currentPlayer, board))
                 game.changeTurn()
                 this.setState({selected: new EmptyPiece()})
             }
@@ -92,7 +89,7 @@ class Board extends Component {
         }
     }
 
-    renderRow(rowIndex, piece, colIndex) {
+    renderRow(possibleMoves, rowIndex, piece, colIndex) {
         let className = styles.box
         if ((rowIndex + colIndex) % 2 === 0) {
             className += ' ' + styles.black
@@ -100,18 +97,22 @@ class Board extends Component {
         if (piece.selected) {
             className += ' ' + styles.selected
         }
+        const isPossibleMove = possibleMoves.some(([r,c]) => rowIndex === r && colIndex === c)
         return <div id={rowIndex + " " + colIndex} onDrop={this.handleDrop.bind(this)} onDragOver={this.prevent} className={className} onClick={this.handleSelection.bind(this, rowIndex, colIndex)}>
+            {isPossibleMove && <div className={styles.move} />}
             {!piece.isEmpty && <img id={rowIndex + " " + colIndex} src={piece.type + '-' + piece.name + '.svg'}  draggable onDragStart={this.handleDrag} className={styles.piece}/>}
         </div>
     }
 
-    renderGrid(row, rowIndex) {
-        return row.map(this.renderRow.bind(this, rowIndex))
+    renderGrid(possibleMoves, row, rowIndex) {
+        return row.map(this.renderRow.bind(this,possibleMoves, rowIndex))
     }
 
     render() {
+        const {board, selected, game} = this.state
+        const possibleMoves = game.showPossibleMoves(selected, board)
         return <div className={styles.board}>
-            {this.state.board.map(this.renderGrid.bind(this))}
+            {board.map(this.renderGrid.bind(this, possibleMoves))}
         </div>
     }
 }

@@ -10,6 +10,10 @@ class Rook extends Piece {
         return this.checkBasicValidity(piece) && Rook.isValidRookMove(board, this.row, this.col, row, col)
     }
 
+    possibleMoves(board) {
+        return [[1, 0], [-1, 0], [0, 1], [0, -1]].flatMap(([r, c]) => this.possibleMovesInQ(board, r, c))
+    }
+
     static isValidRookMove(board, row1, col1, row2, col2) {
         return (row1 === row2 && Rook.isInBetweenRowEmpty(row1, col1, col2, board)) ||
             (col1 === col2 && Rook.isInBetweenColEmpty(col1, row1, row2, board))
