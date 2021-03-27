@@ -11,7 +11,7 @@ class Rook extends Piece {
     }
 
     possibleMoves(board) {
-        return [[1, 0], [-1, 0], [0, 1], [0, -1]].flatMap(([r, c]) => this.possibleMovesInQ(board, r, c))
+        return [[1, 0], [-1, 0], [0, 1], [0, -1]].reduce((acc, [r, c]) => acc.concat(this.possibleMovesInQ(board, r, c)),[])
     }
 
     static isValidRookMove(board, row1, col1, row2, col2) {

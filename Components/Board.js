@@ -31,7 +31,7 @@ class Board extends Component {
         const nextPlayer = game.nextPlayer()
         const currentPlayer = game.currentPlayer()
         if (!selected.isEmpty) {
-            if (!selected.isValidMove(board, rowIndex, colIndex, piece) || !this.canMove(selected, piece, currentPlayer, nextPlayer, rowIndex, colIndex, board)) {
+            if (!selected.isValidMove(board, rowIndex, colIndex, piece) || !game.canMove(selected, rowIndex, colIndex, board)) {
                 selected.selected = false
                 this.setState({selected: new EmptyPiece()})
             } else {
@@ -47,26 +47,6 @@ class Board extends Component {
             piece.selected = true
             this.setState({selected: piece})
         }
-    }
-
-    canMove(selected, piece, currentPlayer, nextPlayer, rowIndex, colIndex, board) {
-        const isEmpty = piece.isEmpty
-        const row = selected.row
-        const col = selected.col
-        if (!isEmpty) {
-            nextPlayer.removePiece(piece)
-        }
-        board[rowIndex][colIndex] = selected
-        board[row][col] = new EmptyPiece()
-        selected.move(rowIndex, colIndex)
-        let result = currentPlayer.isCheck(nextPlayer, board)
-        if (!isEmpty) {
-            nextPlayer.addPiece(piece)
-        }
-        selected.move(row, col)
-        board[row][col] = selected
-        board[rowIndex][colIndex] = piece
-        return !result
     }
 
     handleDrag(e){
@@ -113,6 +93,9 @@ class Board extends Component {
         const possibleMoves = game.showPossibleMoves(selected, board)
         return <div className={styles.board}>
             {board.map(this.renderGrid.bind(this, possibleMoves))}
+            {game.isCheckMate(board) && <div className={styles.won}>
+                {game.nextPlayer().type + "  won"}
+            </div>}
         </div>
     }
 }

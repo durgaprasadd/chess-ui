@@ -21,10 +21,22 @@ class Game {
 
     showPossibleMoves(selected, board) {
         return selected.possibleMoves(board)
-            .filter(([r, c]) => this.canMove(selected, board[r][c], this.currentPlayer(), this.nextPlayer(), r, c, board))
+            .filter(([r, c]) => this.canMove(selected, r, c, board))
     }
 
-    canMove(selected, piece, currentPlayer, nextPlayer, rowIndex, colIndex, board) {
+    isCheckMate(board) {
+        return !this.currentPlayer().pieces.some(piece => {
+                return piece.possibleMoves(board).some(([r, c]) =>
+                    this.canMove(piece, r, c, board)
+                )
+            }
+        )
+    }
+
+    canMove(selected, rowIndex, colIndex, board) {
+        const nextPlayer = this.nextPlayer()
+        const currentPlayer = this.currentPlayer()
+        const piece = board[rowIndex][colIndex]
         const isEmpty = piece.isEmpty
         const row = selected.row
         const col = selected.col

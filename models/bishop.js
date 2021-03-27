@@ -13,7 +13,7 @@ class Bishop extends Piece {
     }
 
     possibleMoves(board) {
-        return [[1, 1], [1, -1], [-1, 1], [-1, -1]].flatMap(([r, c]) => this.possibleMovesInQ(board, r, c))
+        return [[1, 1], [1, -1], [-1, 1], [-1, -1]].reduce((acc, [r, c]) => acc.concat(this.possibleMovesInQ(board, r, c)), [])
     }
 
     possibleMovesInQ1(board) {

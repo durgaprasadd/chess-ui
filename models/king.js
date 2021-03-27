@@ -13,9 +13,8 @@ class King extends Piece {
 
     possibleMoves(board) {
         return [-1, 0, 1]
-            .flatMap(r => [-1, 0, 1].map(c => [r, c]))
+            .reduce((acc,r) => acc.concat([-1, 0, 1].map(c => [r, c])), [])
             .map(([r, c]) => [this.row + r, this.col + c])
-            .log()
             .filter(([r, c]) => this.isValidPosition(r, c))
             .filter(([r, c]) => this.isValidMove(board, r, c, board[r][c]))
     }
