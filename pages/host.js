@@ -35,7 +35,7 @@ class Host extends Component {
             return
         }
         const body = {name, color}
-        const {gameId, type} = await fetch("http://localhost:8000/host", {
+        const {gameId, type} = await fetch("https://chess-backend-js.herokuapp.com/host", {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',

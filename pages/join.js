@@ -43,11 +43,12 @@ class Join extends Component {
             color: "black",
         }
 
-        const {isValid} = await fetch("http://localhost:8000/join", {
+        const {isValid} = await fetch("https://chess-backend-js.herokuapp.com/join", {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': 'chess-backend-js.herokuapp.com'
             },
             body: JSON.stringify(body)
         }).then(res => res.json())
