@@ -43,12 +43,11 @@ class Join extends Component {
             color: "black",
         }
 
-        const {isValid} = await fetch("https://chess-backend-js.herokuapp.com/join", {
+        const {isValid, type} = await fetch(process.env.NEXT_PUBLIC_JOIN_URL, {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
-                'Access-Control-Allow-Origin': 'chess-backend-js.herokuapp.com'
             },
             body: JSON.stringify(body)
         }).then(res => res.json())
@@ -58,7 +57,7 @@ class Join extends Component {
             return
         }
 
-        this.context.updateData({...body, gameId, color: "black", host: false, join: true})
+        this.context.updateData({...body, gameId, color: type, host: false, join: true})
 
         await this.props.router.push({
             pathname: '/multiPlay'
