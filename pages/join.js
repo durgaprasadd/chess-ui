@@ -1,7 +1,7 @@
 import React, {Component} from "react";
 import styles from '../styles/Home.module.css'
 import {withRouter} from "next/router";
-import {AppContext} from "./context";
+import {AppContext} from "../context/context";
 
 class Join extends Component {
     constructor(props) {
@@ -57,7 +57,7 @@ class Join extends Component {
             return
         }
 
-        this.context.updateData({...body, gameId, color:"black", host: false, join: true})
+        this.context.updateData({...body, gameId, color: "black", host: false, join: true})
 
         await this.props.router.push({
             pathname: '/multiPlay'

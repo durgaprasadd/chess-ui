@@ -1,6 +1,6 @@
 import '../styles/globals.css'
 import React from "react";
-import {AppWrapper} from "./context";
+import {AppWrapper} from "../context/context";
 
 function MyApp({Component, pageProps}) {
     return (

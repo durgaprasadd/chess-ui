@@ -1,7 +1,7 @@
 import React, {Component} from "react";
 import styles from '../styles/Home.module.css'
 import {withRouter} from "next/router";
-import {AppContext} from "./context";
+import {AppContext} from "../context/context";
 
 class Host extends Component {
     constructor(props) {
@@ -30,7 +30,7 @@ class Host extends Component {
 
     async submit(e) {
         const {name, color} = this.state
-        if(!this.isNameValid(name)){
+        if (!this.isNameValid(name)) {
             this.setState({isNameValid: this.isNameValid(name)})
             return
         }
@@ -43,7 +43,7 @@ class Host extends Component {
             },
             body: JSON.stringify(body)
         }).then(res => res.json())
-        this.context.updateData({...body,gameId, color: type, host:true, join:false})
+        this.context.updateData({...body, gameId, color: type, host: true, join: false})
         await this.props.router.push({
             pathname: '/multiPlay'
         })

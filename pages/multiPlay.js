@@ -4,19 +4,15 @@ import {withRouter} from "next/router";
 import Cookies from 'cookies'
 import cookieCutter from 'cookie-cutter'
 import {w3cwebsocket as W3CWebSocket} from "websocket";
-import {AppContext} from "./context";
+import {AppContext} from "../context/context";
 
 
 class MultiPlay extends Component {
     constructor(props) {
-        const client = new W3CWebSocket('ws://localhost:8000',undefined, {
-            headers: {
-                "gameId": "1234"
-            }
-        });
+        const client = new W3CWebSocket('ws://localhost:8000');
         super(props);
         this.state = {
-            name:"hello",
+            name: "hello",
             client: client,
             game: false
         }
@@ -40,7 +36,7 @@ class MultiPlay extends Component {
         this.state.client.close()
     }
 
-    send(){
+    send() {
         this.state.client.send("something")
     }
 
