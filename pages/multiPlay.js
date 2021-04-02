@@ -1,8 +1,6 @@
 import React, {Component} from "react";
 import Board from "../Components/Board";
 import {withRouter} from "next/router";
-import Cookies from 'cookies'
-import cookieCutter from 'cookie-cutter'
 import {w3cwebsocket as W3CWebSocket} from "websocket";
 import {AppContext} from "../context/context";
 

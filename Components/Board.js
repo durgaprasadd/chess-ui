@@ -9,7 +9,6 @@ class Board extends Component {
         let game = initialiseGame()
         this.state = {
             game: game,
-            board: this.initialBoard(game),
             selected: new EmptyPiece()
         }
     }
@@ -26,20 +25,20 @@ class Board extends Component {
     }
 
     handleSelection(rowIndex, colIndex, e) {
-        const {board, selected, game} = this.state
-        const piece = board[rowIndex][colIndex]
+        const {selected, game} = this.state
+        const piece = game.board[rowIndex][colIndex]
         const nextPlayer = game.nextPlayer()
         const currentPlayer = game.currentPlayer()
         if (!selected.isEmpty) {
-            if (!selected.isValidMove(board, rowIndex, colIndex, piece) || !game.canMove(selected, rowIndex, colIndex, board)) {
+            if (!selected.isValidMove(game.board, rowIndex, colIndex, piece) || !game.canMove(selected, rowIndex, colIndex)) {
                 selected.selected = false
                 this.setState({selected: new EmptyPiece()})
             } else {
                 if (!piece.isEmpty) nextPlayer.removePiece(piece)
-                board[selected.row][selected.col] = new EmptyPiece()
+                game.board[selected.row][selected.col] = new EmptyPiece()
                 selected.move(rowIndex, colIndex)
                 selected.selected = false
-                board[rowIndex][colIndex] = selected
+                game.board[rowIndex][colIndex] = selected
                 game.changeTurn()
                 this.setState({selected: new EmptyPiece()})
             }
@@ -61,7 +60,7 @@ class Board extends Component {
         e.preventDefault()
         const src = e.dataTransfer.getData("id").trim().split(" ").map(x => +x);
         const des = e.target.id.trim().split(" ").map(x => +x);
-        const selectedPiece = this.state.board[src[0]][src[1]]
+        const selectedPiece = this.state.game.board[src[0]][src[1]]
         if (selectedPiece.type === this.state.game.currentPlayer().type) {
             selectedPiece.selected = true
             this.state.selected = selectedPiece
@@ -89,11 +88,11 @@ class Board extends Component {
     }
 
     render() {
-        const {board, selected, game} = this.state
-        const possibleMoves = game.showPossibleMoves(selected, board)
+        const {selected, game} = this.state
+        const possibleMoves = game.showPossibleMoves(selected)
         return <div className={styles.board}>
-            {board.map(this.renderGrid.bind(this, possibleMoves))}
-            {game.isCheckMate(board) && <div className={styles.won}>
+            {game.board.map(this.renderGrid.bind(this, possibleMoves))}
+            {game.isCheckMate() && <div className={styles.won}>
                 {game.nextPlayer().type + "  won"}
             </div>}
         </div>
