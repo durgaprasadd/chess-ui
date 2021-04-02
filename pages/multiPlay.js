@@ -12,25 +12,12 @@ class MultiPlay extends Component {
         const client = new W3CWebSocket(process.env.NEXT_PUBLIC_WS_URL);
         super(props);
         this.state = {
-            name: "hello",
             client: client,
-            game: false
+            isGame: false
         }
     }
 
     static contextType = AppContext
-
-    static getInitialProps({req, res}) {
-        if (!req) {
-            const gameId = cookieCutter.get('gameId')
-            const name = cookieCutter.get('name')
-            return {gameId, name}
-        }
-        const cookies = new Cookies(req, res)
-        const gameId = cookies.get('gameId')
-        const name = cookies.get('name')
-        return {gameId, name}
-    }
 
     componentWillUnmount() {
         this.state.client.close()
@@ -46,16 +33,17 @@ class MultiPlay extends Component {
             this.state.client.send(JSON.stringify(this.context.data))
         };
         this.state.client.onmessage = (message) => {
-            this.setState({game: JSON.parse(message.data).isGame})
+            this.setState({isGame: JSON.parse(message.data).isGame})
         };
     }
 
     render() {
+        const {name, color, gameId} = this.context.data
         return <div>
-            <div> Name {this.context.data.name}</div>
-            <div> Color {this.context.data.color}</div>
-            <div> GameId {this.context.data.gameId}</div>
-            {this.state.game && <Board props={this.props}/>}
+            <div> Name {name}</div>
+            <div> Color {color}</div>
+            <div> GameId {gameId}</div>
+            {this.state.isGame && <Board props={this.props}/>}
         </div>
 
     }
