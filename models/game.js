@@ -3,10 +3,12 @@ import EmptyPiece from "./EmptyPiece";
 class Game {
     players;
     board;
+    selected;
 
     constructor(players) {
         this.players = players
         this.board = this.initialBoard()
+        this.selected = new EmptyPiece()
     }
 
     initialBoard() {
@@ -32,9 +34,9 @@ class Game {
         return this.players[1]
     }
 
-    showPossibleMoves(selected) {
-        return selected.possibleMoves(this.board)
-            .filter(([r, c]) => this.canMove(selected, r, c, this.board))
+    showPossibleMoves(piece = this.selected) {
+        return piece.possibleMoves(this.board)
+            .filter(([r, c]) => this.canMove(piece, r, c, this.board))
     }
 
     isCheckMate() {
@@ -67,6 +69,34 @@ class Game {
         this.board[row][col] = selected
         this.board[rowIndex][colIndex] = piece
         return !result
+    }
+
+
+    handleSelection(rowIndex, colIndex, e) {
+        const piece = this.board[rowIndex][colIndex]
+        const nextPlayer = this.nextPlayer()
+        const currentPlayer = this.currentPlayer()
+        if (!this.selected.isEmpty) {
+            if (!this.selected.isValidMove(this.board, rowIndex, colIndex, piece) || !this.canMove(this.selected, rowIndex, colIndex)) {
+                this.selected.selected = false
+                this.selected = new EmptyPiece()
+                return this
+            } else {
+                if (!piece.isEmpty) nextPlayer.removePiece(piece)
+                this.board[this.selected.row][this.selected.col] = new EmptyPiece()
+                this.selected.move(rowIndex, colIndex)
+                this.selected.selected = false
+                this.board[rowIndex][colIndex] = this.selected
+                this.changeTurn()
+                this.selected = new EmptyPiece()
+                return this
+            }
+        } else if (!piece.isEmpty && piece.type === currentPlayer.type && this.showPossibleMoves(piece).length !== 0) {
+            piece.selected = true
+            this.selected = piece
+            return this
+        }
+        return this
     }
 }
 

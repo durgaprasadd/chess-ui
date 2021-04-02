@@ -1,6 +1,5 @@
 import React, {Component} from "react";
 import styles from '../styles/Home.module.css'
-import EmptyPiece from "../models/EmptyPiece";
 import initialiseGame from "../data/initialPositions";
 
 class Board extends Component {
@@ -8,44 +7,14 @@ class Board extends Component {
         super(props);
         let game = initialiseGame()
         this.state = {
-            game: game,
-            selected: new EmptyPiece()
+            game: game
         }
-    }
-
-    initialBoard(game) {
-        const board = new Array(8).fill(1).map(i => new Array(8).fill(1).map((j, index) => {
-            return new EmptyPiece()
-        }))
-        game.players.forEach(player => player.pieces.forEach(piece => {
-                board[piece.row][piece.col] = piece
-            }
-        ))
-        return board
     }
 
     handleSelection(rowIndex, colIndex, e) {
-        const {selected, game} = this.state
-        const piece = game.board[rowIndex][colIndex]
-        const nextPlayer = game.nextPlayer()
-        const currentPlayer = game.currentPlayer()
-        if (!selected.isEmpty) {
-            if (!selected.isValidMove(game.board, rowIndex, colIndex, piece) || !game.canMove(selected, rowIndex, colIndex)) {
-                selected.selected = false
-                this.setState({selected: new EmptyPiece()})
-            } else {
-                if (!piece.isEmpty) nextPlayer.removePiece(piece)
-                game.board[selected.row][selected.col] = new EmptyPiece()
-                selected.move(rowIndex, colIndex)
-                selected.selected = false
-                game.board[rowIndex][colIndex] = selected
-                game.changeTurn()
-                this.setState({selected: new EmptyPiece()})
-            }
-        } else if (!piece.isEmpty && piece.type === currentPlayer.type) {
-            piece.selected = true
-            this.setState({selected: piece})
-        }
+        const {game} = this.state
+        game.handleSelection(rowIndex,colIndex)
+        this.setState({game})
     }
 
     handleDrag(e){
@@ -88,8 +57,8 @@ class Board extends Component {
     }
 
     render() {
-        const {selected, game} = this.state
-        const possibleMoves = game.showPossibleMoves(selected)
+        const {game} = this.state
+        const possibleMoves = game.showPossibleMoves()
         return <div className={styles.board}>
             {game.board.map(this.renderGrid.bind(this, possibleMoves))}
             {game.isCheckMate() && <div className={styles.won}>
