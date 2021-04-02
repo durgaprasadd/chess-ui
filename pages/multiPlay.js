@@ -9,7 +9,7 @@ import {AppContext} from "../context/context";
 
 class MultiPlay extends Component {
     constructor(props) {
-        const client = new W3CWebSocket('ws://chess-backend-js.herokuapp.com');
+        const client = new W3CWebSocket('wss://chess-backend-js.herokuapp.com');
         super(props);
         this.state = {
             name: "hello",
