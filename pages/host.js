@@ -52,7 +52,7 @@ class Host extends Component {
     render() {
         const {name, color, isNameValid} = this.state
         return <div className={styles.host}>
-            <div> Host Game</div>
+            <div className={styles.title}> Host Game</div>
             <div>
                 <p>Name</p>
                 <input onChange={this.handleName.bind(this)} value={name}/>
@@ -66,7 +66,9 @@ class Host extends Component {
                     <option value="random">Random</option>
                 </select>
             </div>
-            <button onClick={this.submit.bind(this)}>Submit</button>
+            <div>
+                <button onClick={this.submit.bind(this)}>Submit</button>
+            </div>
         </div>
     }
 }

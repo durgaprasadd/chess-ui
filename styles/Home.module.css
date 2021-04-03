@@ -215,12 +215,34 @@
   margin: 20px;
   border-radius: 2%;
   justify-content: left;
-  align-items: normal;
   padding: 5%;
   width: 50%;
   position: absolute;
   top: 25%;
   left: 25%;
+  font-size: large;
+}
+
+.host input {
+  width: 100%;
+}
+
+.host select{
+  width: 100%;
+  font-size: large;
+}
+
+.host div {
+  margin-top: 1vh;
+}
+
+.host .title {
+  font-size: xx-large;
+}
+
+.host button{
+  font-size: large;
+  width: 100%;
 }
 
 .error {
