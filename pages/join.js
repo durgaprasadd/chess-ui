@@ -67,7 +67,7 @@ class Join extends Component {
     render() {
         const {name, gameId, isNameValid, isGameIdValid} = this.state
         return <div className={styles.host}>
-            <div> Join Game</div>
+            <div className={styles.title}> Join Game</div>
             <div>
                 <p>Name</p>
                 <input onChange={this.handleName.bind(this)} value={name}/>
@@ -78,7 +78,9 @@ class Join extends Component {
                 <input onChange={this.handleGameId.bind(this)} value={gameId}/>
                 {!isGameIdValid && <p className={styles.error}>Game id is not valid</p>}
             </div>
-            <button onClick={this.submit.bind(this)}>Submit</button>
+            <div>
+                <button onClick={this.submit.bind(this)}>Submit</button>
+            </div>
         </div>
     }
 }
