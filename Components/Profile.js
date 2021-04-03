@@ -19,9 +19,9 @@ export class Profile extends Component {
                 {self ? `YOU (${name})` : name}
             </div>
             <div className={styles.profilePieces}>
-                <img src="black-bishop.svg" className={styles}/>
-                <img src="black-rook.svg" className={styles}/>
-                <img src="black-knight.svg" className={styles}/>
+                <img src="black-bishop.svg" className={styles.profilePiece}/>
+                <img src="black-rook.svg" className={styles.profilePiece}/>
+                <img src="black-knight.svg" className={styles.profilePiece}/>
             </div>
         </div>
     }
