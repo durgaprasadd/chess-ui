@@ -1,8 +1,10 @@
 import React, {Component} from "react";
-import Board from "../Components/Board";
 import {withRouter} from "next/router";
 import {w3cwebsocket as W3CWebSocket} from "websocket";
 import {AppContext} from "../context/context";
+import {Profile} from "../Components/Profile";
+import {Loader} from "../Components/Loader";
+import Board from "../Components/Board";
 
 
 class MultiPlay extends Component {
@@ -11,7 +13,8 @@ class MultiPlay extends Component {
         super(props);
         this.state = {
             client: client,
-            isGame: false
+            isGame: false,
+            opponent: {}
         }
     }
 
@@ -31,17 +34,24 @@ class MultiPlay extends Component {
             this.state.client.send(JSON.stringify(this.context.data))
         };
         this.state.client.onmessage = (message) => {
-            this.setState({isGame: JSON.parse(message.data).isGame})
+            const {isGame, opponent} = JSON.parse(message.data)
+            this.setState({isGame, opponent})
         };
     }
 
     render() {
         const {name, color, gameId} = this.context.data
+        const {isGame, opponent} = this.state
+        console.log(gameId)
+        console.log(opponent)
         return <div>
-            <div> Name {name}</div>
-            <div> Color {color}</div>
-            <div> GameId {gameId}</div>
-            {this.state.isGame && <Board props={this.props}/>}
+            {
+                !isGame ? <Loader gameId={gameId}/> :
+                    <><Profile {...opponent} />
+                        <Board props={this.props}/>
+                        <Profile name={name} color={color} self/>
+                    </>
+            }
         </div>
 
     }

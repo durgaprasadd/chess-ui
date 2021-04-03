@@ -32,7 +32,7 @@ class Board extends Component {
         const selectedPiece = this.state.game.board[src[0]][src[1]]
         if (selectedPiece.type === this.state.game.currentPlayer().type) {
             selectedPiece.selected = true
-            this.state.selected = selectedPiece
+            this.state.game.selected = selectedPiece
             this.handleSelection(des[0], des[1], e)
         }
     }

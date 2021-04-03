@@ -1,0 +1,92 @@
+.loader {
+    display: grid;
+    grid-template: 1fr / 1fr;
+    place-items: center;
+    width: 100%;
+    height: 100%;
+    grid-column: 2;
+    grid-row: 2;
+}
+
+.loaderPage {
+    display: grid;
+    width: 100vw;
+    height: 100vh;
+    grid-template-rows: 30vh 50vh auto;
+    grid-template-columns: auto 50vh auto;
+}
+
+.loader > * {
+    grid-column: 1 / 1;
+    grid-row: 1 / 1;
+}
+.loader .spinner {
+    z-index: 2;
+}
+.loader .imager {
+    z-index: 1;
+}
+
+.imager {
+    width: 100%;
+    height: 100%;
+    background-image: url("../public/black-pawn.svg");
+    background-size: 100% 90%;
+    -webkit-animation: imageChange 5s linear infinite; /* Safari */
+    animation: imageChange 5s linear infinite;
+}
+
+.spinner {
+    width: 100%;
+    height: 100%;
+    border: 16px solid #f3f3f3;
+    border-radius: 50%;
+    border-top: 16px solid #3498db;
+    border-bottom: 16px solid #3498db;
+    -webkit-animation: spin 2s linear infinite; /* Safari */
+    animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes imageChange {
+    0%,100% {
+        background-image: url("../public/black-pawn.svg");
+    }
+
+    20% {
+        background-image: url("../public/black-rook.svg");
+
+    }
+
+    40% {
+        background-image: url("../public/black-knight.svg");
+
+    }
+
+    60% {
+        background-image: url("../public/black-bishop.svg");
+    }
+
+    80% {
+        background-image: url("../public/black-king.svg");
+    }
+}
+
+.gameId {
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    grid-column: 2;
+    grid-row: 1;
+    padding: 20%;
+    font-weight: bolder;
+    font-size: xx-large;
+}
