@@ -12,16 +12,14 @@ export class Profile extends Component {
     }
 
     render() {
-        const {name, color, self} = this.props
+        const {name, self, pieces} = this.props
         return <div className={styles.profile}>
             <img src="profile-icon.svg" className={styles.profileIcon}/>
             <div className={styles.name}>
                 {self ? `YOU (${name})` : name}
             </div>
             <div className={styles.profilePieces}>
-                <img src="black-bishop.svg" className={styles.profilePiece}/>
-                <img src="black-rook.svg" className={styles.profilePiece}/>
-                <img src="black-knight.svg" className={styles.profilePiece}/>
+                {pieces.map((piece,i) => <img src={piece.type+"-" + piece.name + ".svg"} key={i} className={styles.profilePiece}/>)}
             </div>
         </div>
     }

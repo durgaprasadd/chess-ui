@@ -3,10 +3,12 @@ class Player {
     pieces;
     king;
     name;
+    removedPieces;
     constructor(type, pieces, king) {
         this.type = type
         this.pieces = pieces
         this.king = king
+        this.removedPieces = []
     }
 
     updateDetails(details){
@@ -14,6 +16,14 @@ class Player {
     }
 
     removePiece(piece) {
+        this.pieces = this.pieces.filter(p => !(p.row === piece.row && p.col === piece.col))
+    }
+
+    removePieceWithSaving(piece) {
+        const foundPiece = this.pieces.find(p => (p.row === piece.row && p.col === piece.col))
+        if (foundPiece !== undefined) {
+            this.removedPieces.push(foundPiece)
+        }
         this.pieces = this.pieces.filter(p => !(p.row === piece.row && p.col === piece.col))
     }
 

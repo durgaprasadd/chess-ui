@@ -39,8 +39,6 @@ class MultiPlay extends Component {
             const {isGame, opponent, moves} = JSON.parse(message.data)
             const {game} = this.state
             if (isGame) {
-                console.log(this.context.data)
-                console.log(opponent)
                 game.updateDetails(this.context.data, opponent)
                 game.applyMoves(moves)
             }
@@ -56,9 +54,9 @@ class MultiPlay extends Component {
         this.setState({game})
     }
 
-    renderRow(possibleMoves, rowIndex, clickable, piece, colIndex) {
+    renderRow(possibleMoves, clickable, piece) {
         let className = styles.box
-        if ((rowIndex + colIndex) % 2 === 0) {
+        if ((piece.row + piece.col) % 2 === 0) {
             className += ' ' + styles.black
         }
         if (piece.selected) {
@@ -67,33 +65,31 @@ class MultiPlay extends Component {
         let onclick = () => {
         }
         if (clickable) {
-            onclick = this.handleSelection.bind(this, rowIndex, colIndex)
+            onclick = this.handleSelection.bind(this, piece.row, piece.col)
         }
-        const isPossibleMove = possibleMoves.some(([r, c]) => rowIndex === r && colIndex === c)
-        return <div id={rowIndex + " " + colIndex} className={className} onClick={onclick}>
+        const isPossibleMove = possibleMoves.some(([r, c]) => piece.row === r && piece.col === c)
+        return <div id={piece.row + " " + piece.col} className={className} onClick={onclick}>
             {isPossibleMove && <div className={styles.move}/>}
             {!piece.isEmpty && <img src={piece.type + '-' + piece.name + '.svg'} className={styles.piece}/>}
         </div>
     }
 
-    renderGrid(possibleMoves, clickable, row, rowIndex) {
-        return row.map(this.renderRow.bind(this, possibleMoves, rowIndex, clickable))
+    renderGrid(possibleMoves, clickable, row) {
+        return row.map(this.renderRow.bind(this, possibleMoves, clickable))
     }
 
     renderBoard() {
         const {game} = this.state
         const clickable = game.isValidPlayer()
         const possibleMoves = game.showPossibleMoves()
-        const isMate = game.isCheckMate()
+        const isCheckMate = game.isCheckMate()
         let boardStyle = styles.board
-        if(isMate) {
+        if (isCheckMate) {
             boardStyle += " " + styles.mate
         }
-        console.log(game.currentPlayer())
-        console.log(game.nextPlayer().name)
         return <div className={boardStyle}>
-            {game.board.map(this.renderGrid.bind(this, possibleMoves, clickable))}
-            {isMate &&
+            {game.getPlayerBoard().map(this.renderGrid.bind(this, possibleMoves, clickable))}
+            {isCheckMate &&
             <div className={styles.won}>
                 {game.nextPlayer().name + "  won"}
             </div>
@@ -103,14 +99,14 @@ class MultiPlay extends Component {
 
     render() {
         const {name, color, gameId} = this.context.data
-        const {isGame, opponent} = this.state
+        const {isGame, opponent, game} = this.state
         return <div>
             {
                 !isGame ? <Loader gameId={gameId}/> :
                     <>
-                        <Profile {...opponent} />
+                        <Profile name={opponent.name} pieces={game.getSelfRemovedPieces()}/>
                         {this.renderBoard()}
-                        <Profile name={name} color={color} self/>
+                        <Profile name={name} color={color} self pieces={game.getOpponentRemovedPieces()}/>
                     </>
             }
         </div>

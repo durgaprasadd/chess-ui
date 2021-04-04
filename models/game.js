@@ -1,4 +1,5 @@
 import EmptyPiece from "./EmptyPiece";
+import {BLACK} from "./constants";
 
 class Game {
     players;
@@ -34,11 +35,11 @@ class Game {
     applyMove(move) {
         const [from, to] = move
         const piece = this.board[to[0]][to[1]]
-        if (!piece.isEmpty) this.getPlayer(piece.type).removePiece(piece)
+        if (!piece.isEmpty) this.getPlayer(piece.type).removePieceWithSaving(piece)
         const movedPiece = this.board[from[0]][from[1]]
         this.board[to[0]][to[1]] = movedPiece
         movedPiece.move(to[0], to[1])
-        this.board[from[0]][from[1]] = new EmptyPiece()
+        this.board[from[0]][from[1]] = new EmptyPiece(from[0],from[1])
         this.moves.push(move)
         this.changeTurn()
     }
@@ -51,8 +52,8 @@ class Game {
     }
 
     initialBoard() {
-        const board = new Array(8).fill(1).map(i => new Array(8).fill(1).map((j, index) => {
-            return new EmptyPiece()
+        const board = new Array(8).fill(1).map((i,row) => new Array(8).fill(1).map((j, col) => {
+            return new EmptyPiece(row, col)
         }))
         this.players.forEach(player => player.pieces.forEach(piece => {
                 board[piece.row][piece.col] = piece
@@ -83,7 +84,6 @@ class Game {
     }
 
     isCheckMate() {
-        console.log("inside checkmate", this.currentPlayer())
         return !this.currentPlayer().pieces.some(piece => {
                 return piece.possibleMoves(this.board).some(([r, c]) =>
                     this.canMove(piece, r, c, this.board)
@@ -103,7 +103,7 @@ class Game {
             nextPlayer.removePiece(piece)
         }
         this.board[rowIndex][colIndex] = selected
-        this.board[row][col] = new EmptyPiece()
+        this.board[row][col] = new EmptyPiece(row, col)
         selected.move(rowIndex, colIndex)
         let result = currentPlayer.isCheck(nextPlayer, this.board)
         if (!isEmpty) {
@@ -126,9 +126,9 @@ class Game {
                 this.selected = new EmptyPiece()
                 return []
             } else {
-                if (!piece.isEmpty) nextPlayer.removePiece(piece)
+                if (!piece.isEmpty) nextPlayer.removePieceWithSaving(piece)
                 const move = [[this.selected.row, this.selected.col], [rowIndex, colIndex]]
-                this.board[this.selected.row][this.selected.col] = new EmptyPiece()
+                this.board[this.selected.row][this.selected.col] = new EmptyPiece(this.selected.row, this.selected.col)
                 this.selected.move(rowIndex, colIndex)
                 this.selected.selected = false
                 this.board[rowIndex][colIndex] = this.selected
@@ -143,6 +143,21 @@ class Game {
             return [];
         }
         return [];
+    }
+
+    getPlayerBoard() {
+        if(this.self === BLACK){
+            return this.board.slice().reverse()
+        }
+        return this.board
+    }
+
+    getOpponentRemovedPieces() {
+        return this.players.find(player => player.type !== this.self).removedPieces
+    }
+
+    getSelfRemovedPieces() {
+        return this.players.find(player => player.type === this.self).removedPieces
     }
 }
 
