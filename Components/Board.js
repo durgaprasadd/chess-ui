@@ -13,19 +13,19 @@ class Board extends Component {
 
     handleSelection(rowIndex, colIndex, e) {
         const {game} = this.state
-        game.handleSelection(rowIndex,colIndex)
+        game.handleSelection(rowIndex, colIndex)
         this.setState({game})
     }
 
-    handleDrag(e){
+    handleDrag(e) {
         e.dataTransfer.setData("id", e.target.id);
     }
 
-    prevent(e){
+    prevent(e) {
         e.preventDefault()
     }
 
-    handleDrop(e){
+    handleDrop(e) {
         e.preventDefault()
         const src = e.dataTransfer.getData("id").trim().split(" ").map(x => +x);
         const des = e.target.id.trim().split(" ").map(x => +x);
@@ -45,15 +45,18 @@ class Board extends Component {
         if (piece.selected) {
             className += ' ' + styles.selected
         }
-        const isPossibleMove = possibleMoves.some(([r,c]) => rowIndex === r && colIndex === c)
-        return <div id={rowIndex + " " + colIndex} onDrop={this.handleDrop.bind(this)} onDragOver={this.prevent} className={className} onClick={this.handleSelection.bind(this, rowIndex, colIndex)}>
-            {isPossibleMove && <div className={styles.move} />}
-            {!piece.isEmpty && <img id={rowIndex + " " + colIndex} src={piece.type + '-' + piece.name + '.svg'}  draggable onDragStart={this.handleDrag} className={styles.piece}/>}
+        const isPossibleMove = possibleMoves.some(([r, c]) => rowIndex === r && colIndex === c)
+        return <div id={rowIndex + " " + colIndex} onDrop={this.handleDrop.bind(this)} onDragOver={this.prevent}
+                    className={className} onClick={this.handleSelection.bind(this, rowIndex, colIndex)}>
+            {isPossibleMove && <div className={styles.move}/>}
+            {!piece.isEmpty &&
+            <img id={rowIndex + " " + colIndex} src={piece.type + '-' + piece.name + '.svg'} draggable
+                 onDragStart={this.handleDrag} className={styles.piece}/>}
         </div>
     }
 
     renderGrid(possibleMoves, row, rowIndex) {
-        return row.map(this.renderRow.bind(this,possibleMoves, rowIndex))
+        return row.map(this.renderRow.bind(this, possibleMoves, rowIndex))
     }
 
     render() {
@@ -61,9 +64,11 @@ class Board extends Component {
         const possibleMoves = game.showPossibleMoves()
         return <div className={styles.board}>
             {game.board.map(this.renderGrid.bind(this, possibleMoves))}
-            {game.isCheckMate() && <div className={styles.won}>
+            {game.isCheckMate() &&
+            <div className={styles.won}>
                 {game.nextPlayer().type + "  won"}
-            </div>}
+            </div>
+            }
         </div>
     }
 }

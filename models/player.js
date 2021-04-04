@@ -2,10 +2,15 @@ class Player {
     type;
     pieces;
     king;
+    name;
     constructor(type, pieces, king) {
         this.type = type
         this.pieces = pieces
         this.king = king
+    }
+
+    updateDetails(details){
+        this.name = details.name
     }
 
     removePiece(piece) {
@@ -18,10 +23,6 @@ class Player {
 
     isCheck(player, board) {
         return player.pieces.some(piece => piece.isValidMove(board, this.king.row, this.king.col, this.king))
-    }
-
-    isCheckMate(player, board) {
-        return this.pieces
     }
 }
 

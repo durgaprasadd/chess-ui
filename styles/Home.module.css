@@ -194,7 +194,7 @@
 }
 
 .won {
-  background-color: white;
+  background-color: lemonchiffon;
   height: 25%;
   width: 25%;
   position: absolute;
@@ -205,7 +205,8 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: x-large;
+  font-size: 7vw;
+  text-align: center;
 }
 
 .host {
@@ -291,4 +292,8 @@
 .profilePiece {
   height: 6vh;
   width: 6vw;
+}
+
+.board.mate > .box{
+  opacity: 50%;
 }
